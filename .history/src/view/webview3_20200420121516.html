@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+	</style>
+	<script src="./asset/vue.js"></script>
+	<script src="./asset/axios.js"></script>
+	<link rel="stylesheet" href="./asset/element.css">
+	<script src="./asset/element.js"></script>
+	<!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+</head>
+
+<body>
+    <div id="app" class="container-fluid">
+		<h2 class="page-title" id="page-title">webview 3</h2>
+			<div class="form-group">
+				<!-- <form name="user" method="post">
+					<p>  名字：<input v-model="userForm.name" type="text" >  </p>
+					<p>  密码：<input v-model="userForm.password" type="password" >  </p>
+					<p>
+						<input type="button" @click="submitForm()" name="Button" value="提交"/>	
+					</p>
+				</form> -->
+				<el-form :model="userForm" status-icon ref="userForm" label-width="50px" class="demo-ruleForm">
+					<el-form-item label="名字" prop="name">
+					  <el-input v-model.number="userForm.name"></el-input>
+					</el-form-item>
+					<el-form-item label="密码" prop="password">
+					  <el-input type="password" v-model="userForm.password" autocomplete="off"></el-input>
+					</el-form-item>
+					<el-button type="primary" @click="submitForm()">提交</el-button>
+				</el-form>
+				<el-button type="info" @click="openHint" class="vs-btn">与vscode通信</el-button>	
+				<el-button @click="getList" type="primary">获取列表</el-button>	
+				<el-select v-model="value" placeholder="请选择">
+					<el-option
+						v-for="item in options"
+						:key="item.name"
+						:label="item.name"
+						:value="item.name">
+					</el-option>
+				</el-select>
+			</div>
+	</div>
+</body>
+
+</html>
+
+<script>
+	let data = {
+		userForm:{
+			name:'',
+			password:''
+		},
+		options:[],
+		value:'',
+		msg:'Hello WebView3!',
+		testMode: false,
+		vscode: acquireVsCodeApi(),
+	}
+	var vm = new Vue({
+	    el:'#app',
+	    data,
+	    methods:{
+			abc(){
+				console.log(213)
+			},
+			openHint:function () {
+				console.log('openHint')
+				this.vscode.postMessage({
+					command: 'openHint',
+					text: this.msg
+				})
+			},
+			getList() {
+				let _this = this
+				axios.get("http://localhost:3000/list/1",this.userForm).then(function (response) {  
+					console.log(response.data);
+					// 将获取到的数据放到下拉列表中
+					_this.options = response.data.list.rows;
+                    }, function (err) { })
+			},
+	        submitForm:function(){
+				console.log(this.userForm)
+				let _this = this
+	            axios.post("http://localhost:3000/submit",this.userForm).then(function (response) {
+                        console.log(response.data);
+                    }, function (err) { })
+	        }
+	    }
+	});
+</script>
+<style>
+	.demo-ruleForm {
+		width: 200px;
+		margin-bottom: 20px;
+	}
+	.vs-btn{
+		clear: both;
+		margin-bottom: 20px;
+	}
+</style>

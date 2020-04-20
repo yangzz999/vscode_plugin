@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSF可视化配置，这个标题其实是没用的</title>
+    <style>
+	</style>
+	<script src="./vue.js"></script>
+</head>
+
+<body>
+    <div id="app" class="container-fluid">
+		<h3 class="page-title" id="page-title">webview 2</h3>
+
+		<div id="courseContent">
+			<p class="alert2 alert-warning" style="width: 95%" id="inputDescription">欢迎来到第一个表单！<br>
+				
+			</p>
+			<form class="form-horizontal">
+				<div class="form-group">
+					<form  method="post" action="result.html">
+						<p>  名字：<input name="name" type="text" >  </p>
+						<p>  密码：<input name="pass" type="password" >  </p>
+
+					</form>
+					<input type="reset" name="Reset" value="重填"/> 
+					<input type="button" onclick="openHint()" name="Button" value="弹~"/>
+					<p>
+						<input type="button" onclick="submitForm()" name="Button" value="提交"/>		
+					</p>
+					<!-- <div class="col-sm-6">
+
+						<button class="btn btn-sm btn-primary" onclick="openPrev()">上一题</button>
+						<button class="btn btn-sm btn-danger" onclick="openNext()">下一题</button>
+
+						<button id='submitButton' class="btn btn-sm btn-success" style="margin-left:20px;width: 60px"
+						onclick="openCheckClick()">提交</button>
+					</div> -->
+				</div>
+			</form>
+		</div>
+	</div>
+	<script type="text/javascript">
+		const testMode = false; // 为true时可以在浏览器打开不报错
+		// vscode webview 网页和普通网页的唯一区别：多了一个acquireVsCodeApi方法
+		const vscode = testMode ? {} : acquireVsCodeApi();
+		const callbacks = {};
+		function openHint() {
+			console.log('openHint')
+			vscode.postMessage({
+				command: 'openHint',
+				text: 'helloword '
+			})
+
+		}
+
+		function submitForm() {
+			console.log('submit')
+			connect();
+		}
+
+		function openCheck() {
+			vscode.postMessage({
+				command: 'openCheck',
+				text: '恭喜你，回答正确！！！ '
+			})
+
+		}
+		function create(){
+			var _ajax=null;
+			try {
+				_ajax=new XMLHttpRequest();
+			}catch(e){
+				_ajax=new ActiveXObjext("Microsoft.XMLHTTP")
+			}
+			return _ajax;
+		}
+		var user = {
+			"name":"zzz",
+			"password":"123456"
+		}
+		function connect(){
+			var _ajax=create();
+			if(_ajax){
+				_ajax.onreadystatechange=function(){
+					if(_ajax.status===200&&_ajax.readyState===4){
+						console.log(11,_ajax.responeText)
+					}
+				};
+				_ajax.open("post","http://localhost:3000/submit",true);
+				_ajax.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+				_ajax.send('a=1&b=2')//向服务器发送数据
+			}
+		}
+
+		
+	</script>
+</body>
+
+</html>
