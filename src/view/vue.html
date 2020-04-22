@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./asset/vue.js"></script>
+    <script src="./component/vue_components.js"></script>
+</head>
+<body>
+<div id="myApp">
+    <one></one>
+    <two></two>
+    <three></three>
+    <four></four>
+</div>
+</body>
+<script>
+    new Vue({
+        el:"#myApp",
+        components:{one,two,three,four}
+    })
+</script>
+</html>

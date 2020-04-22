@@ -38,7 +38,7 @@ module.exports = function (context){
             }
         );
         flag = true;
-        panel.webview.html = getWebViewContent(context,'src/view/webview2.html')
+        panel.webview.html = getWebViewContent(context,'src/view/vue.html')
         panel.webview.onDidReceiveMessage(message => {
 			switch (message.command) {
 

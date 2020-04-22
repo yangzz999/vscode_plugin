@@ -7,9 +7,12 @@
 	</style>
 	<script src="./asset/vue.js"></script>
 	<script src="./asset/axios.js"></script>
-	<link rel="stylesheet" href="./asset/element.css">
+	<link rel="stylesheet" href="./asset/css/element.css">
 	<script src="./asset/element.js"></script>
-	<!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+	<!-- <script type="module">
+		import Element from 'element-ui';
+		import 'element-ui/lib/theme-chalk/index.css';
+	</script> -->
 </head>
 
 <body>
@@ -25,6 +28,7 @@
 					</el-form-item>
 					<el-button type="primary" @click="submitForm()">提交</el-button>
 				</el-form>
+				<button @click="alertA">alert是不好用的</button>
 				<el-button type="info" @click="openHint" class="vs-btn">与vscode通信</el-button>	
 				<el-button @click="getList" type="primary">获取列表</el-button>	
 				<el-select v-model="value" placeholder="请选择">
@@ -35,6 +39,31 @@
 						:value="item.name">
 					</el-option>
 				</el-select>
+				<!-- 弹窗 -->
+				<div>
+					<el-button type="text" @click="dialogFormVisible = true">打开嵌套表单的 Dialog</el-button>
+					<el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+						<el-form :model="form">
+							<el-form-item label="活动名称" :label-width="formLabelWidth">
+							<el-input v-model="form.name" autocomplete="off"></el-input>
+							</el-form-item>
+							<el-form-item label="活动区域" :label-width="formLabelWidth">
+							<el-select v-model="form.region" placeholder="请选择活动区域">
+								<el-option label="区域一" value="shanghai"></el-option>
+								<el-option label="区域二" value="beijing"></el-option>
+							</el-select>
+							</el-form-item>
+						</el-form>
+						<div slot="footer" class="dialog-footer">
+							<el-button @click="dialogFormVisible = false">取 消</el-button>
+							<el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+						</div>
+					</el-dialog>
+				</div>
+				<!-- 消息提示 -->
+				<el-button type="success" @click="open2">成功</el-button>
+				<!-- 跳转 prevented webview navigation -->
+				<el-button type="warning" @click="jump">跳转</el-button>
 			</div>
 	</div>
 </body>
@@ -43,6 +72,18 @@
 
 <script>
 	let data = {
+		dialogFormVisible: false,
+        form: {
+          name: '',
+          region: '',
+          date1: '',
+          date2: '',
+          delivery: false,
+          type: [],
+          resource: '',
+          desc: ''
+        },
+        formLabelWidth: '120px',
 		userForm:{
 			name:'',
 			password:''
@@ -61,12 +102,12 @@
 		testMode: false,
 		vscode: acquireVsCodeApi(),
 	}
-	var vm = new Vue({
+	new Vue({
 	    el:'#app',
 	    data,
 	    methods:{
-			abc(){
-				console.log(213)
+			alertA(){
+				alert(213)
 			},
 			openHint:function () {
 				console.log('openHint')
@@ -89,9 +130,19 @@
 	            axios.post("http://localhost:3000/submit",this.userForm).then(function (response) {
                         console.log(response.data);
                     }, function (err) { })
-	        }
+			},
+			open2() {
+				this.$message({
+				message: '恭喜你，这是一条成功消息',
+				type: 'success'
+				});
+			},
+			jump(){
+				window.location.href="webview2.html"
+			}
 	    }
 	});
+	
 </script>
 <style>
 	.demo-ruleForm {

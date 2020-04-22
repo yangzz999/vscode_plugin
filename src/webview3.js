@@ -14,12 +14,13 @@ function getWebViewContent(context, templatePath) {
     console.log('dirPath',dirPath)
 
     let html = fs.readFileSync(resourcePath, 'utf-8');
-    console.log('html',html)
-    html = html.replace(/(<link.+?href="|<script.+?src="|<img.+?src=")(.+?)"/g, (m, $1, $2) => {
+    
+    html = html.replace(/(<link.+?href="|.+?href="|<script.+?src="|<img.+?src=")(.+?)"/g, (m, $1, $2) => {
         return $1 + vscode.Uri.file(path.resolve(dirPath, $2)).with({
             scheme: 'vscode-resource'
         }).toString() + '"';
     });
+    console.log('html',html)
     return html;
 }
 
